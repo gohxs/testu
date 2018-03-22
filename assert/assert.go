@@ -66,7 +66,9 @@ func (t *Checker) NotEq(a, b interface{}, params ...interface{}) *Checker {
 
 func (t *Checker) fail(msg string) {
 	file, line := getCaller(3)
-	fmt.Fprintf(os.Stderr, "    %s:%-4s \033[31m[FAIL] \033[01;31m%s\033[0m\n", file, fmt.Sprintf("%d:", line), msg)
+	if testing.Verbose() {
+		fmt.Fprintf(os.Stderr, "    %s:%-4s \033[31m[FAIL] \033[01;31m%s\033[0m\n", file, fmt.Sprintf("%d:", line), msg)
+	}
 	t.FailNow()
 	//t.FailNow()
 }
@@ -77,7 +79,9 @@ func (t *Checker) pass(msg string) {
 	}
 	file, line := getCaller(3)
 	file = filepath.Base(file)
-	fmt.Fprintf(os.Stderr, "    %s:%-4s \033[32m[PASS]\033[m %s\n", file, fmt.Sprintf("%d:", line), msg)
+	if testing.Verbose() {
+		fmt.Fprintf(os.Stderr, "    %s:%-4s \033[32m[PASS]\033[m %s\n", file, fmt.Sprintf("%d:", line), msg)
+	}
 }
 
 func getCaller(offs int) (string, int) {
